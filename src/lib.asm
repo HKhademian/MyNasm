@@ -1,9 +1,17 @@
-extern read,itoa,atoi,write
+%ifndef LIB_ASM
+%define LIB_ASM
 
-NULL	EQU 0
-CR		EQU 0DH
-LF		EQU 0AH
-TAB		EQU `\t`
+;;; basic constant and values declration
+section .text
+	NULL			EQU 0
+	CR				EQU 0DH
+	LF				EQU 0AH
+	TAB				EQU `\t`
+	SPC				EQU ' '
+	DOT				EQU '.'
+	%define CRLF CR,LF
+section .code
+
 
 ; getstr buffer, length
 %macro getstr 2
@@ -11,6 +19,7 @@ TAB		EQU `\t`
 	push %1;buffer
 	call read
 %endmacro
+extern read
 
 ; backward compability
 %define fgets getstr
@@ -21,6 +30,7 @@ TAB		EQU `\t`
 	push %2;buffer
 	call itoa
 %endmacro
+extern itoa
 
 ; a2i length, buffer
 %macro a2i 2
@@ -28,11 +38,13 @@ TAB		EQU `\t`
 	push %2;buffer
 	call atoi
 %endmacro
+extern atoi
 
 ; backward compability
 %define puts putstr
 
-; putstr buffer, size
+;;; putstr (buffer, size)
+;;; prints buffer with size to console
 %macro putstr 2
 	;; wish to use mov+sub insteadof push to preserve
 	;; parameters order but mov cant opperate on mem2mem
@@ -44,8 +56,10 @@ TAB		EQU `\t`
 	push DWORD %1 ; buffer
 	call write
 %endmacro
+extern write
 
-; putstr buffer
+;;; putstr buffer
+;;; prints buffer with any size (\0 terminat) to console
 %macro putstr 1
 	pushad
 	lea edi, [%1]
@@ -65,3 +79,50 @@ TAB		EQU `\t`
 	%%_skip:
 	popad
 %endmacro
+
+;;; get ascci char from console and set AL
+;;; no flags and registers (except eax) changed
+%macro getch 0
+	push ecx
+	push edx
+	call _getch
+	pop edx
+	pop ecx
+%endmacro
+extern _getch ; ch = getch()
+
+;;; getch also display it
+%macro getchar 0
+	getch
+	putch eax
+%endmacro
+
+;;; put ascii char on screen
+%macro putch 1
+	enter 0,0
+	push DWORD %1
+	call putchar
+	leave
+%endmacro
+extern putchar ; putchar(ch)
+
+;;; prints new line
+;;; %define putln putcstr LF
+
+;;; beep(freq=440Hz, dur=500)
+;;; beeps in freq(DWORD)Hz for dur(DWORD) ms
+;;; no flags and registers changed
+%macro beep 0-2 440, 500
+	push ecx
+	push edx
+	push eax
+	push DWORD %2		; dur
+	push DWORD %1		; freq
+	call Beep
+	pop eax
+	pop edx
+	pop ecx
+%endmacro
+extern Beep
+
+%endif
