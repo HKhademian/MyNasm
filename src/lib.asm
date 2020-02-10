@@ -10,6 +10,7 @@ section .text
 	SPC				EQU ' '
 	DOT				EQU '.'
 	%define CRLF CR,LF
+	NEWLINE		DB CRLF, NULL
 section .code
 
 
