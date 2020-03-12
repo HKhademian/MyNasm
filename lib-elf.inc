@@ -11,7 +11,7 @@ section .text
 	DOT				EQU		'.'
 	%define		CRLF	CR,LF
 	%define		NEWL	LF
-	NEWLINE		DB		NL, NULL
+	NEWLINE		DB		NEWL, NULL
 section .code
 
 
