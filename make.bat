@@ -2,7 +2,6 @@
 
 SET curdir=%CD%
 SET basedir=%~dp0
-SET curdir=%CD%
 SET srcdir=%basedir%\src\
 SET outdir=%basedir%\out\
 SET bindir=%basedir%\bin\

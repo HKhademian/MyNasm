@@ -3,14 +3,15 @@
 
 ;;; basic constant and values declration
 section .text
-	NULL			EQU 0
-	CR				EQU 0DH
-	LF				EQU 0AH
-	TAB				EQU `\t`
-	SPC				EQU ' '
-	DOT				EQU '.'
-	%define CRLF CR,LF
-	NEWLINE		DB CRLF, NULL
+	NULL			EQU		0
+	CR				EQU		0DH
+	LF				EQU		0AH ; `\n`
+	TAB				EQU		`\t`
+	SPC				EQU		' '
+	DOT				EQU		'.'
+	%define		CRLF	CR,LF
+	%define		NEWL	CR,LF
+	NEWLINE		DB		NL, NULL
 section .code
 
 

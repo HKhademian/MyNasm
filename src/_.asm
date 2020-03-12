@@ -1,4 +1,4 @@
-%include "lib.asm"
+%include "lib.inc"
 global _main
 
 ; constant data here

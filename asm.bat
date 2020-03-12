@@ -2,16 +2,11 @@
 
 SET curdir=%CD%
 SET basedir=%~dp0
-SET curdir=%CD%
 SET bindir=%basedir%\bin\
 
 SET fileName=%~1
 SET fileName=%fileName:/=\%
 SET fileName=%fileName:.asm=%
-
-mkdir %srcdir% >nul 2>&1
-mkdir %outdir% >nul 2>&1
-mkdir %bindir% >nul 2>&1
 
 IF NOT EXIST "%fileName%.asm" GOTO SrcNotFound
 
@@ -28,6 +23,8 @@ DEL "%fileName%.exe" >nul 2>&1
 REM [UN]COMMENT TO delete .obj file
 DEL "%fileName%.obj"
 
+IF NOT EXIST "%fileName%.exe" GOTO ExeNotFound
+
 REM run the app
 "%fileName%.exe"
 
@@ -42,6 +39,10 @@ GOTO End
 
 :ObjNotFound
 ECHO "cannot create object file"
+GOTO End
+
+:ExeNotFound
+ECHO "cannot create excutable file"
 GOTO End
 
 :End

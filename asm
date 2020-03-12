@@ -1,22 +1,44 @@
 #!/bin/bash
 PATH=$PATH:.
-# To compile a NASM assemnly program
-		z="$1"
-		k=${z%.asm}
-		nasm -f elf32  -g -F dwarf "${k}.asm" -o "${k}.o"
 
-		if [ -f "${k}.o" ] 
-        then 
-			# To Link a NASM assemnly program
-		    ld -m elf_i386 "${k}.o" "lib.o" -o "${k}" 
-		else
-			exit 1
-		fi
+curdir=$(pwd)
+basedir=$(dirname "$0")
+bindir=${basedir}/bin/
+
+fileName="$1"
+fileName=${fileName%.asm}
+
+if ![ -f "${fileName}.asm" ] then
+	echo "src file not found"
+	exit 1
+fi
 
 
-# command to execute a NASM assemnly program
-./"${k}"
+rm -i "${fileName}.o"
+# To compile a NASM assembly program
+nasm -f elf32 -g -F dwarf "${fileName}.asm" -o "${fileName}.o"
 
-# command to delete assembler and linker created file
-#rm -i "$k".o
-#rm -i "${k}"
+if ![ -f "${fileName}.o" ] then
+	echo "cannot create object file"
+	exit 1
+fi
+
+rm -i "${fileName}"
+# To Link a NASM assembly program
+gcc -e _main -m32 "${fileName}.o" "${bindir}/lib.o" -o "${fileName}"
+
+# [UN]comment to delete assembler created files
+rm -i "${fileName}.o"
+
+if ![ -f "${fileName}" ] then
+	echo "cannot create excutable file"
+	exit 1
+fi
+
+
+# command to execute a NASM assembly program
+"${fileName}"
+# [UN]comment to delete linker created files
+rm -i "${fileName}"
+
+cd ${curdir}

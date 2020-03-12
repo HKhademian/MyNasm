@@ -1,0 +1,10 @@
+#!/bin/bash
+
+sudo -i
+# apt-get install -y libc6-dev-i386
+# apt-get install -y libx32gcc-4.8-dev
+# apt-get install -y gcc-multilib
+# apt-get install -y gcc-6-multilib
+# apt-get install -y nasm
+apt-get update -y
+apt-get install -y g++-multilib libc6-dev-i386 nasm
