@@ -1,0 +1,4 @@
+#!/bin/bash
+
+apt-get update -y
+apt-get install -y g++-multilib libc6-dev-i386 nasm
