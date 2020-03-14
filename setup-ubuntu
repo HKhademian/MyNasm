@@ -1,4 +1,7 @@
 #!/bin/bash
 
+chmod +x ./asm
+chmod +x ./make
+
 apt-get update -y
 apt-get install -y g++-multilib libc6-dev-i386 nasm
